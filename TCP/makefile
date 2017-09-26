@@ -1,0 +1,60 @@
+# 
+# Filename : makefile
+# Project  : IADA01
+# Date     : January 19,2017
+# Author   : Nathan Bray, Jody Markic
+# Description: 
+#
+
+# 
+# =======================================================
+#                  Linux Makefile
+# =======================================================
+CC = cc
+LD =cc
+CFLAGS = -c
+LDFLAGS = -o
+SRC=./src/
+OBJ_PATH=./obj/
+OBJ = ./obj/TCP.o ./obj/UserInterface.o ./obj/Receiver.o ./obj/Sender.o
+STD_HEADERS = ./inc/Proto.h
+EXE = ./bin/TCP_NBJM.exe
+
+.PHONY: clean program
+# FINAL BINARY Target
+
+$(EXE): $(OBJ)
+	$(LD) $(OBJ) $(LDFLAGS) $(EXE)	
+#
+# =======================================================
+#                  Dependencies
+# =======================================================
+$(OBJ_PATH)TCP.o: $(SRC)TCP.c $(SRC)UserInterface.c $(SRC)Receiver.c $(SRC)Sender.c $(STD_HEADERS)
+	$(CC) $(CFLAGS) $(SRC)TCP.c           $(LDFLAGS) $(OBJ_PATH)TCP.o
+	$(CC) $(CFLAGS) $(SRC)UserInterface.c $(LDFLAGS) $(OBJ_PATH)UserInterface.o
+	$(CC) $(CFLAGS) $(SRC)Receiver.c	  $(LDFLAGS) $(OBJ_PATH)Receiver.o
+	$(CC) $(CFLAGS) $(SRC)Sender.c	      $(LDFLAGS) $(OBJ_PATH)Sender.o
+
+#
+# =======================================================
+# 					Other targets
+# =======================================================  
+# prepare for a complete rebuild						
+clean:
+	rm -f ./bin/*
+	rm -f ./inc/*.h~
+	rm -f $(OBJ_PATH)*.o
+	rm -f $(OBJ_PATH)*.obj
+	rm -f $(SRC)*.c~
+	
+# run the programs sender
+send: $(EXE)
+	chmod +x $(EXE)
+	clear
+	$(EXE) -c 3000
+
+# run the programs reciever
+recv: $(EXE)
+	chmod +x $(EXE)
+	clear
+	$(EXE) -s 3000

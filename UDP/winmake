@@ -1,0 +1,68 @@
+# 
+# Filename : winmake
+# Project  : astA2
+# Date     : February 10, 2016
+# Author   : Nathan Bray
+# Description: 
+# this makefile will compile all source
+# found in the current directory on a Windows OS
+#
+
+#
+# this makefile will compile all source
+# found in the current directory on a Windows OS
+# 
+# =======================================================
+#                  Windows Makefile
+# =======================================================
+CC = cl
+LD = cl
+CFLAGS = /c
+LDFLAGS = /Fe
+OBJPATH = obj
+OBJ = UDP.obj UserInterface.obj Sender.obj Receiver.obj
+STD_HEADERS = inc\Proto.h
+EXE = bin\UDP_NBJM.exe
+
+
+# FINAL BINARY Target
+$(EXE): $(OBJ)
+	$(LD) $(OBJ) $(LDFLAGS)$(EXE)
+	move *.obj .\$(OBJPATH)
+	
+#
+# =======================================================
+#                  Dependencies
+# =======================================================
+UDP.obj: src\UDP.c $(STD_HEADERS)
+	$(CC) src\UDP.c $(CFLAGS)
+	
+UserInterface.obj: src\UserInterface.c $(STD_HEADERS)
+	$(CC) src\UserInterface.c $(CFLAGS)	
+
+Sender.obj: src\Sender.c $(STD_HEADERS)
+	$(CC) src\Sender.c $(CFLAGS)
+
+Receiver.obj: src\Receiver.c $(STD_HEADERS)
+	$(CC) src\Receiver.c $(CFLAGS)	
+
+#
+# =======================================================
+# 					Other targets
+# =======================================================  
+# prepare for a complete rebuild						
+clean:
+	del $(OBJPATH)\*.obj
+	del $(OBJPATH)\*.o
+	del bin\*.exe
+	
+
+send: 
+	cls
+	$(EXE) -s 3000
+
+recv: 
+	cls
+	$(EXE) -r 3000
+	
+	
